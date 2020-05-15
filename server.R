@@ -2,9 +2,9 @@ library(shiny)
 library(shinyWidgets)
 
 source("SVpipe.R")
-source("SP.R")
-source("SPR.R")
-source("SPRB.R")
+source("SV.R")
+source("SVR.R")
+source("SVRB.R")
 
 #dat <- readRDS("SVdat.rds")
 #out <- readRDS("SVsim.rds")
@@ -160,18 +160,18 @@ output$ImplParmsC <- renderTable({
     i <- 1
     
     if(dat[i,"m_dur"] == Inf){
-      mod <- readLines("SP.R", n = 24)
+      mod <- readLines("SV.R", n = 24)
       env1 <- c('times <- seq(0, 100, length=101)',
                with(dat[i,], paste('parms <- c("nu"=',nu,',"lambda"=',lambda,',"f_nu"=',f_nu,')')),
                paste0('inits <- c("S"=',(100-input$V_initial)*(1-input$SR_initial/100),', "V"=',input$V_initial,')'),
-               'assign("mod", SP_mod)')
+               'assign("mod", SV_mod)')
       env3 <- c('V <- out$V', 'R <- rep(0, length(out$time))')
     }else if(dat[i,"m_dur"] != Inf & dat[i,"boost"] == Inf){
-      mod <- readLines("SPR.R", n = 41)
+      mod <- readLines("SVR.R", n = 41)
       env1 <- c('times <- seq(0, 100, length=101)',
                with(dat[i,], paste('parms <- c("nu"=',nu,',"lambda"=',lambda,',"gamma"=',gamma,',"iN"=',iN,',"f_nu"=',f_nu,')')),
                paste0('init <- c("S"=',(100-input$V_initial)*(1-input$SR_initial/100),', "V"=',input$V_initial,', "R"=',(100-input$V_initial)*(input$SR_initial/100),')'),
-               'assign("mod", SPR_mod)',
+               'assign("mod", SVR_mod)',
                'inits <- NULL',
                'inits[c("S","V_0")] <- init[c("S","V")]',
                'if(parms["iN"] > 0){',
@@ -181,11 +181,11 @@ output$ImplParmsC <- renderTable({
               )
       env3 <- c('V <- apply(out[3:(ncol(out)-1)],1,sum)', 'R <- out$R')
     }else{
-      mod <- readLines("SPRB.R", n = 72)
+      mod <- readLines("SVRB.R", n = 72)
       env1 <- c('times <- seq(0, 100, length=101)',
                with(dat[i,],paste('parms <- c("nu"=',nu,',"lambda"=',lambda,',"delta"=',delta,',"gamma"=',gamma,',"iN"=',iN,',"iB"=',iB,',"f_nu"=',f_nu,')')),
                paste0('init <- c("S"=',(100-input$V_initial)*(1-input$SR_initial/100),', "V"=',input$V_initial,', "R"=',(100-input$V_initial)*(input$SR_initial/100),', "B"=0)'),
-               'assign("mod", SPRB_mod)',
+               'assign("mod", SVRB_mod)',
                'inits <- NULL',
                'inits <- c(S=init["S"], V_0=init["V"])',
                'if(parms["iN"] > 0 & parms["iN"] >= parms["iB"]){',

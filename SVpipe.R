@@ -24,15 +24,15 @@ PruneOutput <- function(dat,out){
 }
 
 
-SVpipe <- function(times, parms, init=NULL, method="lsoda", type="SP"){
-  if(type == "SP"){
+SVpipe <- function(times, parms, init=NULL, method="lsoda", type="SV"){
+  if(type == "SV"){
     if(parms["m_dur"] == Inf){
-      assign("mod", SP_mod)
+      assign("mod", SV_mod)
       inits <- c(S=100, V=0)
       if(!is.null(init)) inits[c("S","V")] <- init[c("S","V")]
       
     }else if(parms["m_dur"] != Inf & parms["boost"] == Inf){
-      assign("mod", SPR_mod)
+      assign("mod", SVR_mod)
       inits <- c(S=100, V_0=0)
       if(!is.null(init)) inits[c("S","V_0")] <- init[c("S","V")]
       if(parms["iN"] > 0){
@@ -46,7 +46,7 @@ SVpipe <- function(times, parms, init=NULL, method="lsoda", type="SP"){
       if(!is.null(init)) inits["R"] <- init["R"]
       
     }else{
-      assign("mod", SPRB_mod)
+      assign("mod", SVRB_mod)
       inits <- c(S=100, V_0=0)
       if(!is.null(init)) inits[c("S","V_0")] <- init[c("S","V")]
       if(parms["iN"] > 0 & parms["iN"] >= parms["iB"]){
@@ -70,23 +70,6 @@ SVpipe <- function(times, parms, init=NULL, method="lsoda", type="SP"){
       if(!is.null(init)) inits[c("B","R")] <- init[c("B","R")]
     }
     out <- as.data.frame(ode(method=method, inits, times, mod, parms))
-    
-  }else if(type == "SV"){
-    if(parms["m_dur"] == Inf){
-      assign("mod", SP_mod) #SP_mod fully corresponds to SV_mod
-      inits <- c(S=100, V=0)
-      if(!is.null(init)) inits[c("S","V")] <- init[c("S","V")]
-      
-    }else if(parms["m_dur"] != Inf & parms["boost"] == Inf){
-      assign("mod", SVR_mod)
-      inits <- c(S=100, V=0, R=0)
-      if(!is.null(init)) inits[c("S","V","R")] <- init[c("S","V","R")]
-    }else{
-      assign("mod", SVR_mod)
-      inits <- c(S=100, V=0, R=0)
-      if(!is.null(init)) inits[c("S","V","R")] <- init[c("S","V","R")]
-    }
-    out <- as.data.frame(dede(method=method, inits, times, mod, parms))
   }
 }
 

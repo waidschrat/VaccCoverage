@@ -49,7 +49,7 @@ output$ImplParmsC <- renderTable({
     dat <- convert_input2dat(input, cached = F)
 
     times <- seq(0, 100, length=201)
-    parms <- with(dat[1,], c(mu=mu, nu=nu, lambda=lambda, delta=delta, gamma=gamma, iN=iN, iB=iB, m_dur=m_dur, boost=boost, f_nu=f_nu))
+    parms <- with(dat[1,], c(mu=mu, nu=nu, lambda=lambda, delta=delta, gamma=gamma, iN=iN, iB=iB, m_dur=m_dur, boost=boost))
     out <- list(SVpipe(times, parms, init = c("S"=(100-input$V_initial)*(1-input$SR_initial/100),
                                               "V"=input$V_initial,
                                               "R"=(100-input$V_initial)*(input$SR_initial/100),
@@ -162,14 +162,14 @@ output$ImplParmsC <- renderTable({
     if(dat[i,"m_dur"] == Inf){
       mod <- readLines("SV.R", n = 24)
       env1 <- c('times <- seq(0, 100, length=101)',
-               with(dat[i,], paste('parms <- c("nu"=',nu,',"lambda"=',lambda,',"f_nu"=',f_nu,')')),
+               with(dat[i,], paste('parms <- c("nu"=',nu,',"lambda"=',lambda,')')),
                paste0('inits <- c("S"=',(100-input$V_initial)*(1-input$SR_initial/100),', "V"=',input$V_initial,')'),
                'assign("mod", SV_mod)')
       env3 <- c('V <- out$V', 'R <- rep(0, length(out$time))')
     }else if(dat[i,"m_dur"] != Inf & dat[i,"boost"] == Inf){
       mod <- readLines("SVR.R", n = 41)
       env1 <- c('times <- seq(0, 100, length=101)',
-               with(dat[i,], paste('parms <- c("nu"=',nu,',"lambda"=',lambda,',"gamma"=',gamma,',"iN"=',iN,',"f_nu"=',f_nu,')')),
+               with(dat[i,], paste('parms <- c("nu"=',nu,',"lambda"=',lambda,',"gamma"=',gamma,',"iN"=',iN,')')),
                paste0('init <- c("S"=',(100-input$V_initial)*(1-input$SR_initial/100),', "V"=',input$V_initial,', "R"=',(100-input$V_initial)*(input$SR_initial/100),')'),
                'assign("mod", SVR_mod)',
                'inits <- NULL',
@@ -183,7 +183,7 @@ output$ImplParmsC <- renderTable({
     }else{
       mod <- readLines("SVRB.R", n = 72)
       env1 <- c('times <- seq(0, 100, length=101)',
-               with(dat[i,],paste('parms <- c("nu"=',nu,',"lambda"=',lambda,',"delta"=',delta,',"gamma"=',gamma,',"iN"=',iN,',"iB"=',iB,',"f_nu"=',f_nu,')')),
+               with(dat[i,],paste('parms <- c("nu"=',nu,',"lambda"=',lambda,',"delta"=',delta,',"gamma"=',gamma,',"iN"=',iN,',"iB"=',iB,')')),
                paste0('init <- c("S"=',(100-input$V_initial)*(1-input$SR_initial/100),', "V"=',input$V_initial,', "R"=',(100-input$V_initial)*(input$SR_initial/100),', "B"=0)'),
                'assign("mod", SVRB_mod)',
                'inits <- NULL',

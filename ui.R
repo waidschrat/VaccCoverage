@@ -17,8 +17,8 @@ seqb <- function(x, length = 50, digits = 1){
 
 navbarPage("Vaccination Coverage", selected = "Simulation", id="mode", fluid = FALSE, collapsible = TRUE,
            navbarMenu("Mode", icon = icon("code"),
-                      tabPanel("Simulation", source("mod_simulate.R", local = TRUE)$value),
-                      #tabPanel("Cached", source("mod_cached.R", local = TRUE)),
-                      tabPanel("Specification", source("mod_specify.R", local = TRUE)$value)
+                      tabPanel("Simulation", source("ui_simulate.R", local = TRUE)$value),
+                      #tabPanel("Cached", source("ui_cached.R", local = TRUE)),
+                      tabPanel("Specification", source("ui_specify.R", local = TRUE)$value)
                       )
 )

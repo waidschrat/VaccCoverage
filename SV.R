@@ -10,7 +10,7 @@ SV_mod <- function(t, y, parms) {
   
   #determine change of system
   with(as.list(parms), {
-    nu_v <- nu*f_nu
+    nu_v <- nu
     mu <- nu*S + nu_v*V
     
     dS = +mu -lambda*S -nu*S
@@ -23,7 +23,7 @@ SV_mod <- function(t, y, parms) {
 }
  
 # times <- seq(0, 100, length=1001)
-# parms <- c(mu=0.02, nu=0.02, lambda=0.0115, f_nu=0.5)
+# parms <- c(mu=0.02, nu=0.02, lambda=0.0115)
 # 
 # inits <- c(S=100, V=0)
 # 

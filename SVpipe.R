@@ -18,6 +18,12 @@ PruneOutput <- function(dat,out){
       }
     }
     
+    if(dat[i,"vaccEffect"] < 1){
+      dV <- V - V*dat[i,"vaccEffect"]
+      V <- V - dV
+      R <- R + dV
+    }
+    
     out[[i]] <- data.frame("time"=out[[i]]$time, "S"=S, "V"=V, "R"=R)
   }
   return(out)
@@ -116,7 +122,8 @@ plotSV <- function(out, dat, i, ...){
 
 plotProt <- function(dat, i, ylab="portion of protected (%) among vaccinated", xlab="time since vaccination (years)", ...){
   if(dat[i,"iN"] != Inf){
-    curve(100-100*pgamma(x, shape = dat[i,"m_dur"]*(dat[i,"gamma"]+dat[i,"nu"]), rate = dat[i,"gamma"]+dat[i,"nu"]), ylim=c(0,100), ylab=ylab, xlab=xlab, ...)
+    P0 <- 100*dat[i,"vaccEffect"]
+    curve(P0-P0*pgamma(x, shape = dat[i,"m_dur"]*(dat[i,"gamma"]+dat[i,"nu"]), rate = dat[i,"gamma"]+dat[i,"nu"]), ylim=c(0,100), ylab=ylab, xlab=xlab, ...)
     abline(v=dat[i,"m_dur"], lty=2, col="blue")
   }else{
     plot(c(1,40),c(0,100), type="n", ylab=ylab, xlab=xlab, ...)
@@ -164,7 +171,7 @@ convert_input2dat <- function(input, cached=F){
                   "cv_dur"=input$cv_dur_S/100,
                   "boost"=as.numeric(input$boost_S),
                   "boostPortion"=input$boostPortion_S/100,
-                  "f_nu"=input$vaccdeathRR_S)
+                  "vaccEffect"=input$vaccEffect_S)
     
     tab <- NULL
     tab["mu"] <- tab["nu"] <- PortionRate(UserPars["deathPortion"], 1) #determine and constrain birth rate to mortality rate

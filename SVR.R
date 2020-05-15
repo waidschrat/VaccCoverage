@@ -15,7 +15,7 @@ SVR_mod <- function(t, y, parms) {
   
   #determine change of system
   with(as.list(parms), {
-    nu_v <- nu*f_nu
+    nu_v <- nu
     mu <- nu*SR + nu_v*V
     
     dS = +mu -nu*S -lambda*S
@@ -40,7 +40,7 @@ SVR_mod <- function(t, y, parms) {
 }
 
 # times <- seq(0, 100, length=101)
-# parms <- c(mu=0.02, nu=0.02, lambda=0.05, f_nu=0.5)
+# parms <- c(mu=0.02, nu=0.02, lambda=0.05)
 # 
 # #loss of protection
 # m_dur <- 30 #mean time until protection is lost (yrs)

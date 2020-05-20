@@ -15,7 +15,7 @@ seqb <- function(x, length = 50, digits = 1){
   return(round(exp(ret),digits))
 }
 
-navbarPage("Vaccination Coverage", selected = "Simulation", id="mode", fluid = FALSE, collapsible = TRUE,
+navbarPage("Vaccination Coverage and Protection", selected = "Simulation", id="mode", fluid = FALSE, collapsible = TRUE,
            navbarMenu("Mode", icon = icon("code"),
                       tabPanel("Simulation", source("ui_simulate.R", local = TRUE)$value),
                       #tabPanel("Cached", source("ui_cached.R", local = TRUE)),

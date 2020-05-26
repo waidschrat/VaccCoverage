@@ -1,2 +1,2 @@
 # VaccCoverage
-R Shiny Application for the Projection of Vaccination Coverage
+R Shiny Application for Forecasting the Coverage and Protection Level of Vaccinations using Differential Equation Models
